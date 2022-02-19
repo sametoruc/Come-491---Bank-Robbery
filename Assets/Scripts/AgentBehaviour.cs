@@ -21,6 +21,8 @@ public class AgentBehaviour : MonoBehaviour
     public GameObject[] footPrints;
     public GameObject FPParent;
     Coroutine myRoutine;
+
+    private ObjectPooling myPool;
     
     void Awake()
 	{
@@ -39,8 +41,9 @@ public class AgentBehaviour : MonoBehaviour
         myAgent.enabled = true;
         footPrints = new GameObject[200]; //Creating Game Object Array For The Sprites
         myAgent.SetDestination(targetObject.transform.position);
-        CreateSprite();
         anim.SetTrigger("Terrify");
+        myPool = ObjectPooling.instance;
+        CreateSprite();
     }
 
     // Update is called once per frame
@@ -100,9 +103,10 @@ public class AgentBehaviour : MonoBehaviour
                     {
                         for (int j = 0; j < ((int)(corners[i] - corners[i + 1]).magnitude / 8); j++)
                         {
-                            GameObject gos = Instantiate(footPrint, (corners[i] + ((j + 1) * 8 * (corners[i + 1] - corners[i]).normalized) + new Vector3(0, 0.1f, 0)), Quaternion.identity);
-                            gos.transform.SetParent(FPParent.transform);
-                            gos.name = "footPrint" + k;
+                            GameObject gos = myPool.SpawnFromPool((corners[i] + ((j + 1) * 8 * (corners[i + 1] - corners[i]).normalized) + Vector3.up * 0.1f), Quaternion.identity);
+                            //GameObject gos = Instantiate(footPrint, (corners[i] + ((j + 1) * 8 * (corners[i + 1] - corners[i]).normalized) + new Vector3(0, 0.1f, 0)), Quaternion.identity);
+                            //gos.transform.SetParent(FPParent.transform);
+                            //gos.name = "footPrint" + k;
                             footPrints[k] = gos;
                             if (i < corners.Length - 1)
                             {
@@ -127,12 +131,19 @@ public class AgentBehaviour : MonoBehaviour
         }
         
 	}
-    public void DeleteSprites()
+    private void DeleteSprites()
 	{
+        /*
         foreach (Transform childTransform in FPParent.transform) 
         {
             Destroy(childTransform.gameObject);
         }
+        */
+        if (myPool == null)
+        {
+            Debug.Log("myPool is Empty!");
+        }
+        myPool.ClearAllFootPrints();
     }
     /*public void Wander()
 	{
@@ -281,7 +292,8 @@ public class AgentBehaviour : MonoBehaviour
     {
         if(other.gameObject.CompareTag("FootPrint"))//Deletes Foot Print Which Behind The Path 
         {
-            other.gameObject.SetActive(false);
+            //other.gameObject.SetActive(false);
+            myPool.BackToThePool(other.gameObject);
         }
 		if (other.gameObject.CompareTag("Key"))//Change Bool for Win Condition
         {
@@ -306,7 +318,7 @@ public class AgentBehaviour : MonoBehaviour
             
         }
     }
-    public void LvlWon()
+    private void LvlWon()
 	{
         Debug.Log("LvlWon");
         StopCoroutine(myRoutine);
@@ -315,7 +327,7 @@ public class AgentBehaviour : MonoBehaviour
         IdleDance();
         GameController.instance.WinLevel();
     }
-    public void LvlFail()
+    private void LvlFail()
 	{
         Debug.Log("LvlFail");
         StopCoroutine(myRoutine);

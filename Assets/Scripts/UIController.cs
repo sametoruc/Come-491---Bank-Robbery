@@ -31,7 +31,7 @@ public class UIController : MonoBehaviour
         if (!isFirstSesion)
         {
             isFirstSesion = true;
-            SceneManager.LoadScene(PlayerPrefs.GetInt("Level"));
+           // SceneManager.LoadScene(PlayerPrefs.GetInt("Level"));
         }
         LevelText.text = "LEVEL " + (SceneManager.GetActiveScene().buildIndex).ToString();
         CreateLevelButtons();
