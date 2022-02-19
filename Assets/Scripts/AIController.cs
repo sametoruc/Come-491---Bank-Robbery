@@ -63,6 +63,7 @@ public class AIController : MonoBehaviour
     [SerializeField] private Animator anim;
     
     [SerializeField] private string animParameterWalk;
+    [SerializeField] private string animParameterIdle;
 
     [SerializeField] private string animParameterRun;
 
@@ -312,30 +313,34 @@ public class AIController : MonoBehaviour
 
     void AnimationIdle()
     {
-        // anim.SetBool(animParameterRun, false);
-        // anim.SetBool(animParameterSuspected,false);
-        // anim.SetBool(animParameterWalk,false);
+        anim.SetBool(animParameterRun, false);
+        anim.SetBool(animParameterSuspected,false);
+        anim.SetBool(animParameterWalk,false);
+        anim.SetBool(animParameterIdle, true);
     }
 
     void AnimationWalkStart()
     {
-        // anim.SetBool(animParameterSuspected, false);
-        // anim.SetBool(animParameterRun,false);
-        // anim.SetBool(animParameterWalk,true);
+        anim.SetBool(animParameterIdle, false);
+        anim.SetBool(animParameterSuspected, false);
+        anim.SetBool(animParameterRun,false);
+        anim.SetBool(animParameterWalk,true);
     }
 
     void AnimationRunStart()
     {
-        // anim.SetBool(animParameterSuspected,false);
-        // anim.SetBool(animParameterWalk,false);
-        // anim.SetBool(animParameterRun,true);
+        anim.SetBool(animParameterIdle, false);
+        anim.SetBool(animParameterSuspected,false);
+        anim.SetBool(animParameterWalk,false);
+        anim.SetBool(animParameterRun,true);
     }
 
     void AnimationSuspected()
     {
-        // anim.SetBool(animParameterSuspected,true);
-        // anim.SetBool(animParameterRun,false);
-        // anim.SetBool(animParameterWalk, false);
+        anim.SetBool(animParameterIdle, false);
+        anim.SetBool(animParameterSuspected,true);
+        anim.SetBool(animParameterRun,false);
+        anim.SetBool(animParameterWalk, false);
     }
 
     #endregion
