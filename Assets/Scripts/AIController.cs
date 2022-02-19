@@ -130,6 +130,10 @@ public class AIController : MonoBehaviour
             DynamicAIBehaviour();
             SetAcceleration();
         }
+        else
+        {
+            myAgent.SetDestination(transform.position);
+        }
     }
     
     #region AIMovements
